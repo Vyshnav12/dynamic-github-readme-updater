@@ -1,11 +1,12 @@
-# Spotify GitHub README Updater
+# Dynamic Github README Updater
 
-This project automatically updates your GitHub profile README with your current favorite song from Spotify. It's designed to work with a specific style of README, but can be easily modified to suit different needs.
+This project automatically updates your GitHub profile README with dynamic content fetched from various APIs. While initially designed for Spotify, it can be easily adapted to work with any API of your choice.
 
 ## 🎵 How it works
 
-The script fetches your top track from Spotify's API and updates a specific line in your GitHub profile README. By default, it looks for and replaces a line matching this format:
+The script fetches data from a specified API and updates a targeted line in your GitHub profile README. By default, it's set up to work with Spotify, updating your current favorite song, but it can be customized for various use cases. 
 
+###Default:
 ```markdown
 💽 My current favorite song is **[Song Name - Artist Name](Spotify URL)**
 ```
@@ -14,7 +15,7 @@ The script fetches your top track from Spotify's API and updates a specific line
 
 1. Clone this repository:
    ```
-   git clone https://github.com/YourUsername/spotify-github-readme-updater.git
+   git clone https://github.com/YourUsername/dynamic-github-readme-updater.git
    ```
 
 2. Install dependencies:
@@ -38,7 +39,7 @@ The script fetches your top track from Spotify's API and updates a specific line
 
 1. Ensure your profile README contains a line in the format mentioned above.
 
-2. The GitHub Action will run daily (or on manual trigger) to update your README.
+2. The GitHub Action will run on a schedule (default: daily) or can be manually triggered.
 
 3. To run locally for testing:
    ```
@@ -93,14 +94,14 @@ This script is designed to work with a specific format in your README, but it ca
 4. Find the step that clones this updater repository:
 
    ```yaml
-   - name: Clone spotify-github-readme-updater repository
+   - name: Clone dynamic-github-readme-updater repository
      uses: actions/checkout@v3
      with:
-       repository: Vyshnav12/spotify-github-readme-updater
+       repository: Vyshnav12/dynamic-github-readme-updater
        path: updater
    ```
 
-5. Replace `Vyshnav12/spotify-github-readme-updater` with the path to your forked version of this repository (e.g., `YourUsername/spotify-github-readme-updater`).
+5. Replace `Vyshnav12/dynamic-github-readme-updater` with the path to your forked version of this repository (e.g., `YourUsername/dynamic-github-readme-updater`).
 
 6. If you've renamed any files or changed the repository structure, make sure to update the relevant paths in the workflow file.
 

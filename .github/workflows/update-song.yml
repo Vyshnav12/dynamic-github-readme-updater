@@ -21,10 +21,10 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Clone spotify-github-readme-updater repository
+    - name: Clone dynamic-github-readme-updater repository
       uses: actions/checkout@v3
       with:
-        repository: Vyshnav12/spotify-github-readme-updater
+        repository: Vyshnav12/dynamic-github-readme-updater
         path: updater
 
     - name: Install dependencies

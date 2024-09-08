@@ -6,6 +6,14 @@ const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
 
+/**
+ * Makes a POST request to the Spotify token endpoint to get a new access
+ * token, given the provided refresh token.
+ *
+ * @returns {Promise<string>} A new access token to be used for subsequent
+ *   requests to the Spotify Web API.
+ * @throws {Error} If there is an error refreshing the access token.
+ */
 async function getSpotifyAccessToken() {
   const url = 'https://accounts.spotify.com/api/token';
   const headers = {
@@ -26,6 +34,16 @@ async function getSpotifyAccessToken() {
   }
 }
 
+/**
+ * Makes a GET request to the Spotify Web API to get the top track from the
+ * authenticated user's account, given the provided access token.
+ *
+ * @param {string} accessToken - A valid Spotify access token.
+ *
+ * @returns {Promise<object>} The user's top track, or throws an error if the
+ *   request fails.
+ * @throws {Error} If there is an error fetching the top track.
+ */
 async function getTopTrack(accessToken) {
   const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=1';
   const headers = {
@@ -41,6 +59,14 @@ async function getTopTrack(accessToken) {
   }
 }
 
+/**
+ * Updates the user's README with the provided top track.
+ *
+ * @param {object} track - The user's top track, as returned by the Spotify Web API.
+ *
+ * @returns {Promise<boolean>} true if the README was updated, or false if no update was necessary.
+ * @throws {Error} If there is an error updating the README.
+ */
 async function updateReadme(track) {
   const songInfo = ` 💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**`;
   const readmePath = path.join(process.cwd(), 'README.md');
@@ -64,6 +90,15 @@ async function updateReadme(track) {
   }
 }
 
+
+/**
+ * Main entry point for the script.
+ *
+ * This function first fetches an access token, then uses it to fetch the user's top
+ * track. If a top track is found, it then updates the user's README with this
+ * information. If no top track is found, or if there is an error along the way, an
+ * appropriate error message is logged to the console.
+ */
 async function main() {
   try {
     const accessToken = await getSpotifyAccessToken();
