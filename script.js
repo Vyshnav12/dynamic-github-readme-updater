@@ -1,5 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
 
 // Load your Spotify credentials from environment variables set in GitHub Actions
 const clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -48,8 +49,10 @@ async function getTopTrack() {
     if (track) {
       const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**\n`;
 
+      // Path to the README file in the checked-out repository
+      const readmePath = path.join(process.cwd(), 'README.md');
+
       // Read the existing README file
-      const readmePath = 'README.md';
       let readmeContent = '';
       if (fs.existsSync(readmePath)) {
         readmeContent = fs.readFileSync(readmePath, 'utf8');
@@ -64,6 +67,12 @@ async function getTopTrack() {
       // Write the updated content back to the README file
       fs.writeFileSync(readmePath, newContent, 'utf8');
       console.log('Updated README.md with the new top track:', track.name);
+
+      // Commit and push changes to GitHub
+      const execSync = require('child_process').execSync;
+      execSync('git add README.md');
+      execSync('git commit -m "Update README with the most played Spotify track"');
+      execSync('git push');
     }
   } catch (error) {
     console.error('Error fetching top track:', error);

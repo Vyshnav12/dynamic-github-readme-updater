@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout spotify-github-readme-updater repository
       uses: actions/checkout@v3
+      with:
+        path: updater-repo
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -20,13 +22,15 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: updater-repo
 
     - name: Run script to update README
       env:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
         SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-      run: node script.js
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+      run: node updater-repo/script.js
 
     - name: Checkout profile repository
       uses: actions/checkout@v3
@@ -37,7 +41,7 @@ jobs:
 
     - name: Copy updated README to profile repository
       run: |
-        cp README.md profile-repo/README.md
+        cp updater-repo/README.md profile-repo/README.md
         cd profile-repo
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
