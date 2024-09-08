@@ -32,6 +32,7 @@ The script fetches your top track from Spotify's API and updates a specific line
    - `SPOTIFY_CLIENT_ID`
    - `SPOTIFY_CLIENT_SECRET`
    - `SPOTIFY_REFRESH_TOKEN`
+   - `PAT` (This is your personal access token from github settings)
 
 ## 📋 Usage
 
@@ -46,11 +47,76 @@ The script fetches your top track from Spotify's API and updates a specific line
 
 ## 🛠 Customization
 
-To modify the script for a different use case:
+This script is designed to work with a specific format in your README, but it can be easily adapted for different use cases. Here's how to customize it:
 
-1. In `script.js`, update the `songInfoRegex` and `songInfo` variables to match your desired format.
+### Modifying the script for different content:
 
-2. Adjust the GitHub Action workflow file (`update-song.yml`) if necessary.
+1. Open `script.js` in your favorite text editor.
+
+2. Locate the `updateReadme` function. Within this function, find these two lines:
+
+   ```javascript
+   const songInfo = ` 💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**`;
+   const songInfoRegex = /💽 My current favorite song is \*\*\[.*?\]\(.*?\)\*\*/;
+   ```
+
+3. Update `songInfo` to match your desired output format. For example, if you want to display your top artist instead of a song, you might change it to:
+
+   ```javascript
+   const artistInfo = ` 🎨 My current favorite artist is **[${artist.name}](${artist.external_urls.spotify})**`;
+   ```
+
+4. Modify `songInfoRegex` to match the existing line in your README that you want to replace. The regex should match the entire line. For the artist example above, it might look like:
+
+   ```javascript
+   const artistInfoRegex = /🎨 My current favorite artist is \*\*\[.*?\]\(.*?\)\*\*/;
+   ```
+
+5. Update the variable names and function logic accordingly throughout the script.
+
+### Adjusting the GitHub Actions workflow:
+
+1. Open `.github/workflows/update-song.yml` in your text editor.
+
+2. Locate the `Checkout profile repository` step:
+
+   ```yaml
+   - name: Checkout profile repository
+     uses: actions/checkout@v3
+     with:
+       repository: Vyshnav12/Vyshnav12
+       token: ${{ secrets.PAT }}
+   ```
+
+3. Replace `Vyshnav12/Vyshnav12` with the path to your own GitHub profile repository (e.g., `YourUsername/YourUsername`).
+
+4. Find the step that clones this updater repository:
+
+   ```yaml
+   - name: Clone spotify-github-readme-updater repository
+     uses: actions/checkout@v3
+     with:
+       repository: Vyshnav12/spotify-github-readme-updater
+       path: updater
+   ```
+
+5. Replace `Vyshnav12/spotify-github-readme-updater` with the path to your forked version of this repository (e.g., `YourUsername/spotify-github-readme-updater`).
+
+6. If you've renamed any files or changed the repository structure, make sure to update the relevant paths in the workflow file.
+
+### Testing your changes:
+
+After making these modifications:
+
+1. Run the script locally to test:
+   ```
+   node script.js
+   ```
+2. Check your README file to ensure the correct line is being updated.
+3. Commit and push your changes to both repositories (your profile repo and the forked updater repo).
+4. Manually trigger the GitHub Action in your profile repository to test the entire workflow.
+
+Remember, you can customize this script to update any single line in your README with any desired content from Spotify or other sources, as long as you adjust the API calls and formatting logic accordingly.
 
 ## 🤝 Contributing
 
