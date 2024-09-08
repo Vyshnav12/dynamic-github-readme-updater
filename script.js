@@ -1,7 +1,7 @@
 const axios = require('axios');
-const fs = require('fs'); // To load environment variables from a .env file
+const fs = require('fs');
 
-// Load your Spotify credentials from environment variables
+// Load your Spotify credentials from environment variables set in GitHub Actions
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
