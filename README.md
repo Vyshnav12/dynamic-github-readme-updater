@@ -1,7 +1,7 @@
 # Dynamic Github README Updater
 
 ![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow)
-![Build Status](https://img.shields.io/github/workflow/status/Vyshnav12/dynamic-github-readme-updater/Update%20Spotify%20Top%20Track?cache=0)
+[![Actions Status](https://github.com/Vyshnav12/dynamic-github-readme-updater/workflows/Update%20Spotify%20Top%20Track/badge.svg)](https://github.com/Vyshnav12/dynamic-github-readme-updater/actions)
 ![License](https://img.shields.io/github/license/Vyshnav12/dynamic-github-readme-updater)
 ![Version](https://img.shields.io/github/v/release/Vyshnav12/dynamic-github-readme-updater)
 ![Issues](https://img.shields.io/github/issues/Vyshnav12/dynamic-github-readme-updater)
