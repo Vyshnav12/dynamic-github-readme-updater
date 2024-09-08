@@ -10,43 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout spotify-github-readme-updater repository
+    - name: Checkout profile repository
       uses: actions/checkout@v3
       with:
-        path: updater-repo
+        repository: Vyshnav12/Vyshnav12
+        token: ${{ secrets.PAT }}
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
 
+    - name: Clone spotify-github-readme-updater repository
+      uses: actions/checkout@v3
+      with:
+        repository: Vyshnav12/spotify-github-readme-updater
+        path: updater
+
     - name: Install dependencies
       run: npm install
-      working-directory: updater-repo
+      working-directory: updater
 
     - name: Run script to update README
       env:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
         SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: node updater-repo/script.js
+      run: node updater/script.js
 
-    - name: Checkout profile repository
-      uses: actions/checkout@v3
-      with:
-        repository: Vyshnav12/Vyshnav12
-        token: ${{ secrets.PAT }}
-        path: profile-repo
-
-    - name: Copy updated README to profile repository
+    - name: Commit and push if changed
       run: |
-        cp updater-repo/README.md profile-repo/README.md
-        cd profile-repo
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
         git add README.md
-        git commit -m "Update README with the most played Spotify track" || echo "No changes to commit"
-        git push
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update README with the most played Spotify track" && git push)
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}

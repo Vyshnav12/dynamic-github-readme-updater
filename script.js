@@ -1,13 +1,11 @@
 const axios = require('axios');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
-// Load your Spotify credentials from environment variables set in GitHub Actions
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
 
-// Function to get a new access token using the refresh token
 async function getSpotifyAccessToken() {
   const url = 'https://accounts.spotify.com/api/token';
   const headers = {
@@ -23,20 +21,12 @@ async function getSpotifyAccessToken() {
     const response = await axios.post(url, data.toString(), { headers });
     return response.data.access_token;
   } catch (error) {
-    console.error('Error refreshing access token:', error);
-    return null;
+    console.error('Error refreshing access token:', error.response?.data || error.message);
+    throw error;
   }
 }
 
-// Function to get the most played song from Spotify
-async function getTopTrack() {
-  const accessToken = await getSpotifyAccessToken();
-  
-  if (!accessToken) {
-    console.error('No access token available');
-    return;
-  }
-
+async function getTopTrack(accessToken) {
   const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=1';
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
@@ -44,40 +34,54 @@ async function getTopTrack() {
 
   try {
     const response = await axios.get(url, { headers });
-    const track = response.data.items[0];
-
-    if (track) {
-      const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**\n`;
-
-      // Path to the README file in the checked-out repository
-      const readmePath = path.join(process.cwd(), 'README.md');
-
-      // Read the existing README file
-      let readmeContent = '';
-      if (fs.existsSync(readmePath)) {
-        readmeContent = fs.readFileSync(readmePath, 'utf8');
-      }
-
-      // Check if the song info already exists in the file
-      const songInfoRegex = /💽 My current favorite song is \[.*?\]\(.*?\)\n/;
-      const newContent = songInfoRegex.test(readmeContent)
-        ? readmeContent.replace(songInfoRegex, songInfo) // Update the existing line
-        : readmeContent + songInfo; // Append if it doesn't exist
-
-      // Write the updated content back to the README file
-      fs.writeFileSync(readmePath, newContent, 'utf8');
-      console.log('Updated README.md with the new top track:', track.name);
-
-      // Commit and push changes to GitHub
-      const execSync = require('child_process').execSync;
-      execSync('git add README.md');
-      execSync('git commit -m "Update README with the most played Spotify track"');
-      execSync('git push');
-    }
+    return response.data.items[0];
   } catch (error) {
-    console.error('Error fetching top track:', error);
+    console.error('Error fetching top track:', error.response?.data || error.message);
+    throw error;
   }
 }
 
-// Run the function to update the README with the most played song
-getTopTrack();
+async function updateReadme(track) {
+  const songInfo = ` 💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**`;
+  const readmePath = path.join(process.cwd(), 'README.md');
+
+  try {
+    let readmeContent = await fs.readFile(readmePath, 'utf8');
+    const songInfoRegex = /💽 My current favorite song is \*\*\[.*?\]\(.*?\)\*\*/;
+    
+    if (songInfoRegex.test(readmeContent)) {
+      const newContent = readmeContent.replace(songInfoRegex, songInfo.trim());
+      await fs.writeFile(readmePath, newContent, 'utf8');
+      console.log('Updated README.md with the new top track:', track.name);
+      return true; // Indicates that a change was made
+    } else {
+      console.log('No existing song info found in README. No changes made.');
+      return false; // Indicates that no change was made
+    }
+  } catch (error) {
+    console.error('Error updating README:', error.message);
+    throw error;
+  }
+}
+
+async function main() {
+  try {
+    const accessToken = await getSpotifyAccessToken();
+    const track = await getTopTrack(accessToken);
+    if (track) {
+      const updated = await updateReadme(track);
+      if (updated) {
+        console.log('README updated successfully.');
+      } else {
+        console.log('No update was necessary.');
+      }
+    } else {
+      console.log('No top track found');
+    }
+  } catch (error) {
+    console.error('An error occurred:', error.message);
+    process.exit(1);
+  }
+}
+
+main();
