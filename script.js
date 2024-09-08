@@ -49,10 +49,20 @@ async function getTopTrack() {
     const track = response.data.items[0];
 
     if (track) {
-      const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**`;
+      const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**\n`;
       
-      // Update the README file with the new song
-      fs.writeFileSync('README.md', songInfo);
+      // Read the existing README file
+      const readmePath = 'README.md';
+      let readmeContent = '';
+      if (fs.existsSync(readmePath)) {
+        readmeContent = fs.readFileSync(readmePath, 'utf8');
+      }
+
+      // Append the new song info to the existing content
+      const updatedContent = readmeContent.replace(/💽 My current favorite song is .*\n/, '') + songInfo;
+
+      // Write the updated content back to the README file
+      fs.writeFileSync(readmePath, updatedContent, 'utf8');
       console.log('Updated README.md with the new top track:', track.name);
     }
   } catch (error) {
