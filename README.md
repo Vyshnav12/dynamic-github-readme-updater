@@ -1,10 +1,14 @@
 # Dynamic Github README Updater
 
-![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow)
-[![Actions Status](https://github.com/Vyshnav12/dynamic-github-readme-updater/workflows/Update%20Spotify%20Top%20Track/badge.svg)](https://github.com/Vyshnav12/dynamic-github-readme-updater/actions)
-![License](https://img.shields.io/github/license/Vyshnav12/dynamic-github-readme-updater)
-![Version](https://img.shields.io/github/v/release/Vyshnav12/dynamic-github-readme-updater)
-![Issues](https://img.shields.io/github/issues/Vyshnav12/dynamic-github-readme-updater)
+<p align="center">
+   <img src="https://img.shields.io/badge/Language-JavaScript-yellow" alt="JavaScript" />
+   <a href="https://github.com/Vyshnav12/dynamic-github-readme-updater/actions">
+     <img src="https://github.com/Vyshnav12/dynamic-github-readme-updater/workflows/Update%20Spotify%20Top%20Track/badge.svg" alt="Actions Status" />
+   </a>
+   <img src="https://img.shields.io/github/license/Vyshnav12/dynamic-github-readme-updater" alt="License" />
+   <img src="https://img.shields.io/github/v/release/Vyshnav12/dynamic-github-readme-updater" alt="Version" />
+   <img src="https://img.shields.io/github/issues/Vyshnav12/dynamic-github-readme-updater" alt="Issues" />
+</p>
 
 This project automatically updates your GitHub profile README with dynamic content fetched from various APIs. While initially designed for Spotify, it can be easily adapted to work with any API of your choice.
 
