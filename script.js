@@ -20,10 +20,7 @@ async function getSpotifyAccessToken() {
 
   try {
     const response = await axios.post(url, data.toString(), { headers });
-    const accessToken = response.data.access_token;
-
-    // Return the new access token
-    return accessToken;
+    return response.data.access_token;
   } catch (error) {
     console.error('Error refreshing access token:', error);
     return null;
@@ -50,7 +47,7 @@ async function getTopTrack() {
 
     if (track) {
       const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**\n`;
-      
+
       // Read the existing README file
       const readmePath = 'README.md';
       let readmeContent = '';
@@ -58,11 +55,14 @@ async function getTopTrack() {
         readmeContent = fs.readFileSync(readmePath, 'utf8');
       }
 
-      // Append the new song info to the existing content
-      const updatedContent = readmeContent.replace(/💽 My current favorite song is .*\n/, '') + songInfo;
+      // Check if the song info already exists in the file
+      const songInfoRegex = /💽 My current favorite song is \[.*?\]\(.*?\)\n/;
+      const newContent = songInfoRegex.test(readmeContent)
+        ? readmeContent.replace(songInfoRegex, songInfo) // Update the existing line
+        : readmeContent + songInfo; // Append if it doesn't exist
 
       // Write the updated content back to the README file
-      fs.writeFileSync(readmePath, updatedContent, 'utf8');
+      fs.writeFileSync(readmePath, newContent, 'utf8');
       console.log('Updated README.md with the new top track:', track.name);
     }
   } catch (error) {
