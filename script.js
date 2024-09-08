@@ -52,7 +52,7 @@ async function getTopTrack(accessToken) {
 
   try {
     const response = await axios.get(url, { headers });
-    return response.data.items[0];
+    return response.data.items[1];
   } catch (error) {
     console.error('Error fetching top track:', error.response?.data || error.message);
     throw error;
