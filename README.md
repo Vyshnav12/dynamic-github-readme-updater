@@ -1,4 +1,12 @@
-# Dynamic Github README Updater
+Vyshnav12# Dynamic Github README Updater
+
+![Build Status](https://img.shields.io/github/workflow/status/Vyshnav12/dynamic-github-readme-updater/CI)
+![License](https://img.shields.io/github/license/Vyshnav12/dynamic-github-readme-updater)
+![Version](https://img.shields.io/github/v/release/Vyshnav12/dynamic-github-readme-updater)
+![Issues](https://img.shields.io/github/issues/Vyshnav12/dynamic-github-readme-updater)
+![Forks](https://img.shields.io/github/forks/Vyshnav12/dynamic-github-readme-updater)
+![Stars](https://img.shields.io/github/stars/Vyshnav12/dynamic-github-readme-updater)
+![Dependencies](https://img.shields.io/david/Vyshnav12/dynamic-github-readme-updater)
 
 This project automatically updates your GitHub profile README with dynamic content fetched from various APIs. While initially designed for Spotify, it can be easily adapted to work with any API of your choice.
 
@@ -15,7 +23,7 @@ The script fetches data from a specified API and updates a targeted line in your
 
 1. Clone this repository:
    ```
-   git clone https://github.com/YourUsername/dynamic-github-readme-updater.git
+   git clone https://github.com/Vyshnav12/dynamic-github-readme-updater.git
    ```
 
 2. Install dependencies:
