@@ -45,14 +45,14 @@ async function getSpotifyAccessToken() {
  * @throws {Error} If there is an error fetching the top track.
  */
 async function getTopTrack(accessToken) {
-  const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=2';
+  const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=1';
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
   };
 
   try {
     const response = await axios.get(url, { headers });
-    return response.data.items[1];
+    return response.data.items[0];
   } catch (error) {
     console.error('Error fetching top track:', error.response?.data || error.message);
     throw error;
