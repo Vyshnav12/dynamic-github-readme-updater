@@ -1,71 +1,66 @@
 const axios = require('axios');
 const fs = require('fs');
-const path = require('path');
+require('dotenv').config();  // To load environment variables from a .env file
 
-// Spotify API credentials
+// Load your Spotify credentials from environment variables
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
 
-// Get Spotify Access Token
-async function getSpotifyToken() {
+// Function to get a new access token using the refresh token
+async function getSpotifyAccessToken() {
   const url = 'https://accounts.spotify.com/api/token';
   const headers = {
+    'Authorization': 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
   };
   const data = new URLSearchParams({
     'grant_type': 'refresh_token',
-    'refresh_token': refreshToken
+    'refresh_token': refreshToken,
   });
 
   try {
     const response = await axios.post(url, data.toString(), { headers });
-    return response.data.access_token;
+    const accessToken = response.data.access_token;
+
+    // Return the new access token
+    return accessToken;
   } catch (error) {
-    console.error('Error fetching Spotify token:', error);
+    console.error('Error refreshing access token:', error);
+    return null;
   }
 }
 
-// Fetch most played song in the last 30 days
+// Function to get the most played song from Spotify
 async function getTopTrack() {
-  const token = await getSpotifyToken();
+  const accessToken = await getSpotifyAccessToken();
+  
+  if (!accessToken) {
+    console.error('No access token available');
+    return;
+  }
+
   const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=1';
   const headers = {
-    'Authorization': `Bearer ${token}`
+    'Authorization': `Bearer ${accessToken}`,
   };
 
   try {
     const response = await axios.get(url, { headers });
     const track = response.data.items[0];
-    const songName = track.name;
-    const artist = track.artists[0].name;
-    const trackUrl = track.external_urls.spotify;
-    return { songName, artist, trackUrl };
+
+    if (track) {
+      const songInfo = `💽 My current favorite song is **[${track.name} - ${track.artists[0].name}](${track.external_urls.spotify})**`;
+      
+      // Update the README file with the new song
+      fs.writeFileSync('README.md', songInfo);
+      console.log('Updated README.md with the new top track:', track.name);
+    }
   } catch (error) {
     console.error('Error fetching top track:', error);
   }
 }
 
-// Update GitHub README file
-async function updateGithubReadme(songName, artist, trackUrl) {
-  const readmeFilePath = path.join(__dirname, 'README.md');
-  try {
-    let readmeContent = fs.readFileSync(readmeFilePath, 'utf-8');
-    const newContent = `💽 My current favorite song is **[${songName} - ${artist}](${trackUrl})**`;
-    const updatedContent = readmeContent.replace(/💽 My current favorite song is \*\*.*?\*\*/, newContent);
-
-    fs.writeFileSync(readmeFilePath, updatedContent);
-    console.log('GitHub README updated successfully!');
-  } catch (error) {
-    console.error('Error updating GitHub README:', error);
-  }
-}
-
-// Main function
-(async function() {
-  const { songName, artist, trackUrl } = await getTopTrack();
-  if (songName && artist && trackUrl) {
-    await updateGithubReadme(songName, artist, trackUrl);
-  }
-})();
+// Run the function to update the README with the most played song
+getTopTrack();
+    
