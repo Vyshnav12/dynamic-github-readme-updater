@@ -1,6 +1,5 @@
 const axios = require('axios');
-const fs = require('fs');
-require('dotenv').config();  // To load environment variables from a .env file
+const fs = require('fs'); // To load environment variables from a .env file
 
 // Load your Spotify credentials from environment variables
 const clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -63,4 +62,3 @@ async function getTopTrack() {
 
 // Run the function to update the README with the most played song
 getTopTrack();
-    
