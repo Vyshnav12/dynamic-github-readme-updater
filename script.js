@@ -45,7 +45,7 @@ async function getSpotifyAccessToken() {
  * @throws {Error} If there is an error fetching the top track.
  */
 async function getTopTrack(accessToken) {
-  const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=1';
+  const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=2';
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
   };
