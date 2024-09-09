@@ -56,7 +56,7 @@ The script fetches data from a specified API and updates a targeted line in your
    node script.js
    ```
 
-## 🛠 Customization
+## Customization
 
 This script is designed to work with a specific format in your README, but it can be easily adapted for different use cases. Here's how to customize it:
 
