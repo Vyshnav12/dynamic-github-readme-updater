@@ -12,7 +12,7 @@
 
 This project automatically updates your GitHub profile README with dynamic content fetched from various APIs. While initially designed for Spotify, it can be easily adapted to work with any API of your choice.
 
-## 🎵 How it works
+## How it works
 
 The script fetches data from a specified API and updates a targeted line in your GitHub profile README. By default, it's set up to work with Spotify, updating your current favorite song, but it can be customized for various use cases. 
 
@@ -21,7 +21,7 @@ The script fetches data from a specified API and updates a targeted line in your
 💽 My current favorite song is **[Song Name - Artist Name](Spotify URL)**
 ```
 
-## 🚀 Setup
+## Setup
 
 1. Clone this repository:
    ```
@@ -45,7 +45,7 @@ The script fetches data from a specified API and updates a targeted line in your
    - `SPOTIFY_REFRESH_TOKEN`
    - `PAT` (This is your personal access token from github settings)
 
-## 📋 Usage
+## Usage
 
 1. Ensure your profile README contains a line in the format mentioned above.
 
@@ -129,19 +129,10 @@ After making these modifications:
 
 Remember, you can customize this script to update any single line in your README with any desired content from Spotify or other sources, as long as you adjust the API calls and formatting logic accordingly.
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to fork this project and adapt it to your needs. If you make improvements that could benefit others, please consider submitting a pull request!
 
-## 📜 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
-## 🙏 Acknowledgements
-
-- Spotify Web API
-- GitHub Actions
-
----
-
-Happy coding and enjoy your music! 🎶
